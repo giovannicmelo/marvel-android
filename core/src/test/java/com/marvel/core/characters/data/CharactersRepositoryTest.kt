@@ -6,7 +6,6 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -21,10 +20,6 @@ class CharactersRepositoryTest {
     fun setUp() {
         dataSourceMock = mock()
         repository = CharactersRepository(dataSourceMock)
-    }
-
-    @After
-    fun tearDown() {
     }
 
     @Test
