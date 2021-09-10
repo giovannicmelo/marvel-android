@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="character"
+            type="com.marvel.data.models.Character" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcvCharacter"
+        android:layout_width="154dp"
+        android:layout_height="230dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginBottom="6dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="4dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivThumb"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                android:transitionName="@string/image_transition_name"
+                app:imageFromUrl="@{@string/file_and_extension(character.thumbnail.path, character.thumbnail.extension)}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tvName"
+                tools:src="@tools:sample/avatars"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/deep_red_two"
+                android:background="@android:color/white"
+                android:padding="10dp"
+                android:transitionName="@string/text_transition_name"
+                android:text="@{character.name.toUpperCase()}"
+                android:fontFamily="@font/marvel_regular"
+                tools:text="@tools:sample/first_names"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

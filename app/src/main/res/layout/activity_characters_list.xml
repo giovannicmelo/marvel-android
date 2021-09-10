@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="isLoading"
+            type="boolean" />
+
+        <variable
+            name="isConnected"
+            type="boolean" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.character.CharactersListActivity">
+
+        <include
+            android:id="@+id/appbar"
+            layout="@layout/appbar_main" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:background="@color/white_gray"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeCharacters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{isConnected ? View.VISIBLE : View.GONE}">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvCharacters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="70dp"
+                    android:paddingStart="@dimen/default_padding"
+                    android:paddingEnd="@dimen/default_padding"
+                    android:clipToPadding="false"
+                    app:spanCount="2"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    tools:listitem="@layout/item_character" />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/deadpool"
+                android:visibility="@{isLoading ? View.VISIBLE : View.GONE}"/>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:visibility="@{!isConnected ? View.VISIBLE : View.GONE}"
+                tools:visibility="gone">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/has_no_internet"
+                    android:textColor="@color/deep_red_two"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/open_sans" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btTryAgain"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:text="@string/try_again"
+                    android:textSize="16sp"
+                    android:textColor="@color/white_gray"
+                    android:textAllCaps="false"
+                    android:background="@drawable/shape_background_button"
+                    android:backgroundTint="@color/deep_red"
+                    android:onClick="@{clickListener}"
+                    android:fontFamily="@font/open_sans" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etSearch"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="top"
+                android:layout_marginEnd="@dimen/default_margin"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/shape_background_search"
+                android:drawableStart="@drawable/ic_search"
+                android:hint="@string/search"
+                android:ems="10"
+                android:drawablePadding="5dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="15dp"
+                android:elevation="3dp"
+                android:inputType="textCapSentences"
+                android:fontFamily="@font/open_sans"
+                android:imeOptions="actionSearch"
+                android:imeActionLabel="@string/search"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="74dp"
+                android:background="@drawable/shape_gradient_bottom"
+                android:layout_gravity="top"/>
+        </FrameLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:id="@+id/fabScroll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_upward"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/default_margin"
+            android:elevation="@dimen/default_elevation"
+            android:onClick="@{clickListener}"
+            android:backgroundTint="@color/deep_red"
+            app:borderWidth="0dp"
+            app:tint="@color/white_gray"
+            app:fabCustomSize="50dp" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

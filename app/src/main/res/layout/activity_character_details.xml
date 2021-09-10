@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="isLoading"
+            type="boolean" />
+
+        <variable
+            name="isConnected"
+            type="boolean" />
+
+        <variable
+            name="character"
+            type="com.marvel.data.models.Character" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <include
+            android:id="@+id/appbarCollapsing"
+            layout="@layout/appbar_collapsing"
+            app:appbarText="@{character.name}"
+            app:imagePath="@{@string/file_and_extension(character.thumbnail.path, character.thumbnail.extension)}"/>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:background="@color/white_gray"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animationView"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center"
+                    app:lottie_colorFilter="@color/deep_red_two"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/loading"
+                    android:visibility="@{isLoading ? View.VISIBLE : View.GONE}"/>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:descendantFocusability="blocksDescendants"
+                    android:orientation="vertical"
+                    android:padding="@dimen/default_padding"
+                    android:visibility="@{isConnected ? View.VISIBLE : View.GONE}">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textColor="@color/deep_red_two"
+                        android:lineSpacingExtra="5sp"
+                        android:fontFamily="@font/open_sans_light"
+                        android:text="@string/last_update"
+                        android:visibility="@{!isLoading ? View.VISIBLE : View.GONE}"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/deep_red_two"
+                        android:lineSpacingExtra="5sp"
+                        android:fontFamily="@font/open_sans_light"
+                        android:text="@{character.dateFormatted()}"
+                        tools:text="@tools:sample/date/ddmmyy"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="14sp"
+                        android:textColor="@android:color/black"
+                        android:lineSpacingExtra="5sp"
+                        android:fontFamily="@font/open_sans"
+                        android:visibility="@{character.description.equals(``) ? View.GONE : View.VISIBLE}"
+                        tools:text="@tools:sample/lorem/random"
+                        app:renderHtml="@{character.description}"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/deep_red_two"
+                        android:lineSpacingExtra="5sp"
+                        android:fontFamily="@font/open_sans_light"
+                        android:visibility="@{character.comics.items.size() == 0 ? View.GONE : View.VISIBLE}"
+                        android:text="@string/comics" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvComics"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusableInTouchMode="false"
+                        android:nestedScrollingEnabled="false"
+                        android:layout_marginTop="10dp"
+                        android:clipToPadding="false"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/item_comic"
+                        tools:itemCount="3"/>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/has_no_internet"
+                    android:textColor="@color/deep_red_two"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/open_sans"
+                    android:visibility="@{!isConnected ? View.VISIBLE : View.GONE}"
+                    tools:visibility="gone"/>
+            </FrameLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
