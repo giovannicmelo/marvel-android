@@ -1,8 +1,8 @@
 package com.marvel.characters.presentation.utils
 
+import com.marvel.core.characters.domain.Character
 import org.junit.Assert
 import org.junit.Test
-import com.marvel.core.characters.domain.Character
 
 class ExtensionsUnitTest {
 
@@ -32,8 +32,8 @@ class ExtensionsUnitTest {
 
     @Test
     fun `To Json, when a object is converted into a string json, then returns a valid json string`() {
-        val character = Character(1, "Test")
-        val expectedJsonString = "{\"id\":1,\"name\":\"Test\"}"
+        val character = Character(1, "Test", comics = listOf())
+        val expectedJsonString = "{\"id\":1,\"name\":\"Test\",\"comics\":[]}"
         val actualJsonString = character.toJson()
         Assert.assertEquals("These objects are not the same", expectedJsonString, actualJsonString)
     }
