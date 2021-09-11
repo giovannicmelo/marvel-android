@@ -6,15 +6,15 @@ import com.marvel.core.characters.usecases.FetchAllCharactersByNameUseCase
 import com.marvel.core.characters.usecases.FetchAllCharactersUseCase
 
 class CharactersListViewModel(
-    private val fetchAllCharactersUseCase: FetchAllCharactersUseCase,
-    private val fetchAllCharactersByNameUseCase: FetchAllCharactersByNameUseCase
+    private val fetchAllCharacters: FetchAllCharactersUseCase,
+    private val fetchAllCharactersByName: FetchAllCharactersByNameUseCase
 ) : ViewModel() {
 
     fun fetchCharactersList(query: String? = null) = state {
         if (query.isNullOrEmpty()) {
-            fetchAllCharactersUseCase()
+            fetchAllCharacters()
         } else {
-            fetchAllCharactersByNameUseCase(query)
+            fetchAllCharactersByName(query)
         }
     }
 }

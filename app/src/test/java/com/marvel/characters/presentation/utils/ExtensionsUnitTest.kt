@@ -1,11 +1,8 @@
-package com.marvel.data
+package com.marvel.characters.presentation.utils
 
-import com.marvel.data.models.Character
-import com.marvel.data.utils.fromJson
-import com.marvel.data.utils.toJson
-import com.marvel.data.utils.toMd5
 import org.junit.Assert
 import org.junit.Test
+import com.marvel.core.characters.domain.Character
 
 class ExtensionsUnitTest {
 

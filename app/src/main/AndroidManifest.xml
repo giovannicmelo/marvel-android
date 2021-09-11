@@ -35,7 +35,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.character.CharacterDetailsActivity"
+            android:name=".presentation.views.activities.CharacterDetailsActivity"
             android:screenOrientation="portrait" />
 
         <meta-data

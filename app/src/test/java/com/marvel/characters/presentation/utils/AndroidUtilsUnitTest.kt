@@ -1,6 +1,5 @@
-package com.marvel.data
+package com.marvel.characters.presentation.utils
 
-import com.marvel.data.utils.getCurrentTimeStamp
 import org.junit.Assert
 import org.junit.Test
 

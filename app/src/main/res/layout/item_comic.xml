@@ -7,7 +7,7 @@
 
         <variable
             name="comic"
-            type="com.marvel.data.models.Comic" />
+            type="com.marvel.core.characters.domain.Comic" />
     </data>
 
     <FrameLayout

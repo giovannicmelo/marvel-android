@@ -1,14 +1,16 @@
-package com.marvel.characters.ui.character
+package com.marvel.characters.presentation.views.activities
 
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.appbar.AppBarLayout
 import com.marvel.characters.R
 import com.marvel.characters.base.BaseActivity
 import com.marvel.characters.databinding.ActivityCharacterDetailsBinding
+import com.marvel.characters.frameworks.utils.State
+import com.marvel.characters.presentation.viewmodels.CharacterDetailsViewModel
+import com.marvel.characters.presentation.views.adapters.ComicsListAdapter
 import com.marvel.characters.utils.extensions.animateTransitionOnRebind
 import com.marvel.characters.utils.extensions.isConnected
 import com.marvel.characters.utils.extensions.setBackIconColor
@@ -20,36 +22,13 @@ import kotlin.math.abs
 class CharacterDetailsActivity :
     BaseActivity<ActivityCharacterDetailsBinding>(R.layout.activity_character_details) {
 
-    private val viewModel: CharacterViewModel by viewModel()
-    private val characterId by lazy {
-        intent.getIntExtra(CharactersListActivity.CHARACTER_ID_EXTRA, 0)
-    }
+    private val characterId by lazy { intent.getIntExtra(CHARACTER_ID_EXTRA, 0) }
+
+    private val viewModel: CharacterDetailsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.animateTransitionOnRebind()
-        setupActionBar()
-        setupCollapsingLayout()
-        loadCharacter()
-    }
-
-    private fun subscribeUi() {
-        viewModel.character.observe(this, Observer {
-            binding.character = it
-            binding.isLoading = false
-        })
-
-        viewModel.comics.observe(this, Observer {
-            it?.let {
-                binding.rvComics.adapter = ComicAdapter(it)
-                binding.rvComics.setHasFixedSize(true)
-            }
-        })
-
-        viewModel.apiErrorLiveData.observe(this, Observer {
-            Toast.makeText(this, it.second, Toast.LENGTH_LONG).show()
-            binding.isLoading = false
-        })
+        setupViews()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -59,15 +38,41 @@ class CharacterDetailsActivity :
         return super.onOptionsItemSelected(item)
     }
 
-    private fun loadCharacter() = lifecycleScope.launch {
+    private fun setupViews() {
+        binding.animateTransitionOnRebind()
         binding.isConnected = isConnected()
-        binding.isLoading = isConnected()
-        if (binding.isConnected) {
-            viewModel.getCharacterById(characterId)
-        } else {
-            delay(500)
-            binding.appbarCollapsing.appBarCollapsing.setExpanded(false, true)
+        setupActionBar()
+        setupCollapsingLayout()
+        lifecycleScope.launch {
+            if (binding.isConnected) {
+                loadCharacter(characterId)
+            } else {
+                delay(500)
+                binding.appbarCollapsing.appBarCollapsing.setExpanded(false, true)
+            }
         }
+    }
+
+    private fun loadCharacter(id: Int) {
+        viewModel.getCharacter(id).observe(this, { state ->
+            when (state) {
+                is State.LoadingState -> {
+                    binding.isLoading = true
+                }
+                is State.DataState -> {
+                    binding.isLoading = false
+                    binding.character = state.data
+                    state.data.comics?.let {
+                        binding.rvComics.adapter = ComicsListAdapter(it)
+                        binding.rvComics.setHasFixedSize(true)
+                    }
+                }
+                is State.ErrorState -> {
+                    Toast.makeText(this, state.exception.localizedMessage, Toast.LENGTH_LONG).show()
+                    binding.isLoading = false
+                }
+            }
+        })
     }
 
     private fun setupActionBar() {

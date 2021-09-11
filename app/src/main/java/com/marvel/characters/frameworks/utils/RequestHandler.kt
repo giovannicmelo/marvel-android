@@ -1,7 +1,7 @@
 package com.marvel.characters.frameworks.utils
 
 import com.marvel.characters.frameworks.dtos.ResultDto
-import com.marvel.data.utils.fromJson
+import com.marvel.characters.presentation.utils.fromJson
 import retrofit2.HttpException
 import retrofit2.Response
 import kotlin.Exception

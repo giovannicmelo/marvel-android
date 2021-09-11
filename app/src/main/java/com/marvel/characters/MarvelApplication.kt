@@ -3,7 +3,6 @@ package com.marvel.characters
 import android.app.Application
 import com.marvel.characters.di.getAppModules
 import com.marvel.core.getCoreModules
-import com.marvel.data.di.getDataModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
@@ -24,7 +23,6 @@ class MarvelApplication : Application() {
     private fun getModules(): MutableList<Module> {
         val modules: MutableList<Module> = arrayListOf()
         modules.addAll(getAppModules())
-        modules.addAll(getDataModules())
         modules.addAll(getCoreModules())
         return modules
     }

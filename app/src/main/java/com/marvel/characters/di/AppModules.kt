@@ -1,14 +1,14 @@
 package com.marvel.characters.di
 
+import com.marvel.characters.BuildConfig
 import com.marvel.characters.frameworks.api.CharactersApi
 import com.marvel.characters.frameworks.remote.CharactersRemoteDataSource
 import com.marvel.characters.frameworks.services.ServiceClient
+import com.marvel.characters.presentation.utils.getCurrentTimeStamp
+import com.marvel.characters.presentation.utils.toMd5
+import com.marvel.characters.presentation.viewmodels.CharacterDetailsViewModel
 import com.marvel.characters.presentation.viewmodels.CharactersListViewModel
-import com.marvel.characters.ui.character.CharacterViewModel
 import com.marvel.core.characters.data.contracts.CharactersDataSource
-import com.marvel.data.BuildConfig
-import com.marvel.data.utils.getCurrentTimeStamp
-import com.marvel.data.utils.toMd5
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -26,13 +26,13 @@ private val characterViewModelModule = module {
         )
     }
 
-    viewModel { CharacterViewModel(get()) }
     viewModel {
         CharactersListViewModel(
-            fetchAllCharactersUseCase = get(),
-            fetchAllCharactersByNameUseCase = get()
+            fetchAllCharacters = get(),
+            fetchAllCharactersByName = get()
         )
     }
+    viewModel { CharacterDetailsViewModel(get()) }
 }
 
 fun getAppModules() = listOf(characterViewModelModule)

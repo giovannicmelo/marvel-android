@@ -18,15 +18,22 @@ android {
         }
     }
 
-    def localPropsFile = file('../local.properties')
-    if (localPropsFile.canRead()) {
-        Properties localProps = new Properties()
-        def PUBLIC_KEY = localProps['PUBLIC_KEY']
-        def PRIVATE_KEY = localProps['PRIVATE_KEY']
+    def propsFile = file('../keys.properties')
+    if (propsFile.canRead()) {
+        Properties props = new Properties()
+        def PUBLIC_KEY = props['PUBLIC_KEY']
+        def PRIVATE_KEY = props['PRIVATE_KEY']
 
-        defaultConfig {
-            buildConfigField "String", "PUBLIC_KEY", "\"$PUBLIC_KEY\""
-            buildConfigField "String", "PRIVATE_KEY", "\"$PRIVATE_KEY\""
+        buildTypes {
+            debug {
+                buildConfigField "String", "PUBLIC_KEY", "\"4f75a5aaab66bbb8766c5db2cc5e4be7\""
+                buildConfigField "String", "PRIVATE_KEY", "\"6795e93e7af13218371eff85c819c9b209ba4c3e\""
+            }
+
+            release {
+                buildConfigField "String", "PUBLIC_KEY", "\"4f75a5aaab66bbb8766c5db2cc5e4be7\""
+                buildConfigField "String", "PRIVATE_KEY", "\"6795e93e7af13218371eff85c819c9b209ba4c3e\""
+            }
         }
     } else {
         throw new GradleException("Could not read local.properties!")
@@ -37,9 +44,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    // Data
-    implementation project(':data')
-
     // Core
     implementation project(":core")
 
@@ -48,6 +52,11 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$arch_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$arch_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$arch_version"
+    // region Koin
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    implementation "org.koin:koin-androidx-scope:$koin_version"
+    // endregion
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
     implementation "com.google.android.material:material:1.4.0"
     implementation "androidx.gridlayout:gridlayout:1.0.0"

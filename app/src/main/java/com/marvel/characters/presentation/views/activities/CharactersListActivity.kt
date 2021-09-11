@@ -13,7 +13,6 @@ import com.marvel.characters.databinding.ActivityCharactersListBinding
 import com.marvel.characters.frameworks.utils.State
 import com.marvel.characters.presentation.viewmodels.CharactersListViewModel
 import com.marvel.characters.presentation.views.adapters.CharactersListAdapter
-import com.marvel.characters.ui.character.CharacterDetailsActivity
 import com.marvel.characters.utils.extensions.hideKeyboard
 import com.marvel.characters.utils.extensions.isConnected
 import com.marvel.characters.utils.extensions.launchActivityForSharedElements
@@ -43,13 +42,13 @@ class CharactersListActivity :
         super.onCreate(savedInstanceState)
         setupViews()
         configureListeners()
-        loadCharacters()
     }
 
     private fun setupViews() {
         binding.isConnected = isConnected()
         setupRecycler()
         setupSwipe()
+        loadCharacters()
     }
 
     private fun configureListeners() {
