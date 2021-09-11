@@ -12,4 +12,4 @@ data class CharacterDto(
     val thumbnail: ImageDto? = null,
     val resourceURI: String? = null,
     val comics: ComicListDto? = null
-): Parcelable
+) : Parcelable

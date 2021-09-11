@@ -6,7 +6,6 @@ import android.view.View
 import com.marvel.characters.R
 import com.marvel.characters.base.BaseActivity
 import com.marvel.characters.databinding.ActivitySplashBinding
-import com.marvel.characters.presentation.views.activities.CharactersListActivity
 import com.marvel.characters.utils.extensions.launchActivity
 import com.marvel.characters.utils.extensions.runTransition
 import kotlinx.coroutines.delay

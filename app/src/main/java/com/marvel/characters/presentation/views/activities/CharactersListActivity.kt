@@ -6,7 +6,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.marvel.characters.R
 import com.marvel.characters.base.BaseActivity

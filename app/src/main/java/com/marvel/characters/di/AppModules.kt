@@ -11,7 +11,6 @@ import com.marvel.data.utils.getCurrentTimeStamp
 import com.marvel.data.utils.toMd5
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import java.security.PublicKey
 
 private val characterViewModelModule = module {
     single { ServiceClient.getClient(api = CharactersApi::class.java) }

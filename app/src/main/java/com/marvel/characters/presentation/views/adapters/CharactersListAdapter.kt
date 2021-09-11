@@ -32,7 +32,6 @@ class CharactersListAdapter(
 
     override fun getItemCount() = listItems.size
 
-
     fun submitList(items: List<Character>) {
         listItems = items
         notifyDataSetChanged()

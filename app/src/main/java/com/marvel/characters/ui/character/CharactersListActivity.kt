@@ -63,7 +63,7 @@ class CharactersListActivity :
     private fun subscribeUi() {
         viewModel.characters.observe(this, Observer {
             if (it != null) {
-                //adapter.submitList(it)
+                // adapter.submitList(it)
                 binding.isLoading = false
                 binding.swipeCharacters.isRefreshing = false
             }
