@@ -1,12 +1,12 @@
-package com.marvel.characters.ui.splash
+package com.marvel.characters.presentation.views.activities
 
+import androidx.lifecycle.lifecycleScope
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.lifecycleScope
-import com.marvel.characters.ui.character.CharactersListActivity
 import com.marvel.characters.R
 import com.marvel.characters.base.BaseActivity
 import com.marvel.characters.databinding.ActivitySplashBinding
+import com.marvel.characters.presentation.views.activities.CharactersListActivity
 import com.marvel.characters.utils.extensions.launchActivity
 import com.marvel.characters.utils.extensions.runTransition
 import kotlinx.coroutines.delay

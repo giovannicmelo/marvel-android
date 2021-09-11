@@ -1,4 +1,4 @@
-package com.marvel.characters.ui.character
+package com.marvel.characters.presentation.views.activities
 
 import android.os.Bundle
 import android.view.View
@@ -11,21 +11,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.marvel.characters.R
 import com.marvel.characters.base.BaseActivity
 import com.marvel.characters.databinding.ActivityCharactersListBinding
-import com.marvel.characters.utils.extensions.animateTransitionOnRebind
+import com.marvel.characters.frameworks.utils.State
+import com.marvel.characters.presentation.viewmodels.CharactersListViewModel
+import com.marvel.characters.presentation.views.adapters.CharactersListAdapter
+import com.marvel.characters.ui.character.CharacterDetailsActivity
 import com.marvel.characters.utils.extensions.hideKeyboard
 import com.marvel.characters.utils.extensions.isConnected
 import com.marvel.characters.utils.extensions.launchActivityForSharedElements
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+const val CHARACTER_ID_EXTRA = "characterId"
+
 class CharactersListActivity :
     BaseActivity<ActivityCharactersListBinding>(R.layout.activity_characters_list) {
 
-    companion object {
-        const val CHARACTER_ID_EXTRA = "characterId"
-    }
+    private val viewModel: CharactersListViewModel by viewModel()
 
-    private val viewModel: CharacterViewModel by viewModel()
-    private val adapter = CharacterAdapter(emptyList()) { character, image, text ->
+    private val adapter = CharactersListAdapter(emptyList()) { character, image, text ->
         launchActivityForSharedElements<CharacterDetailsActivity>(
             Bundle().apply {
                 putInt(
@@ -40,10 +42,25 @@ class CharactersListActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupViews()
+        configureListeners()
+        loadCharacters()
+    }
+
+    private fun setupViews() {
+        binding.isConnected = isConnected()
+        setupRecycler()
+        setupSwipe()
+    }
+
+    private fun configureListeners() {
         binding.clickListener = View.OnClickListener { view ->
-            performClickListener(view)
+            when (view.id) {
+                binding.fabScroll.id -> binding.rvCharacters.smoothScrollToPosition(0)
+                binding.btTryAgain.id -> loadCharacters(binding.etSearch.text.toString())
+            }
         }
-        binding.etSearch.setOnEditorActionListener { v, actionId, event ->
+        binding.etSearch.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 hideKeyboard()
                 loadCharacters(v.text.toString())
@@ -51,49 +68,6 @@ class CharactersListActivity :
             } else {
                 false
             }
-        }
-        binding.fabScroll.hide()
-        binding.animateTransitionOnRebind()
-        setupRecycler()
-        setupSwipe()
-
-        loadCharacters(binding.etSearch.text.toString())
-    }
-
-    private fun subscribeUi() {
-        viewModel.characters.observe(this, Observer {
-            if (it != null) {
-                //adapter.submitList(it)
-                binding.isLoading = false
-                binding.swipeCharacters.isRefreshing = false
-            }
-        })
-
-        viewModel.apiErrorLiveData.observe(this, Observer {
-            Toast.makeText(this, it.second.toString(), Toast.LENGTH_LONG).show()
-            binding.isLoading = false
-            binding.swipeCharacters.isRefreshing = false
-        })
-    }
-
-    private fun performClickListener(view: View) {
-        when (view.id) {
-            binding.fabScroll.id -> binding.rvCharacters.smoothScrollToPosition(0)
-            binding.btTryAgain.id -> loadCharacters(binding.etSearch.text.toString())
-        }
-    }
-
-    private fun loadCharacters(query: String? = null) {
-        binding.isConnected = isConnected()
-        binding.isLoading = isConnected()
-        binding.swipeCharacters.isRefreshing = !binding.isLoading
-
-        if (binding.isLoading) {
-            adapter.submitList(emptyList())
-        }
-
-        if (binding.isConnected) {
-            viewModel.getCharacters(query)
         }
     }
 
@@ -119,6 +93,31 @@ class CharactersListActivity :
                     binding.fabScroll.show()
                 } else if (dy < 0 && binding.fabScroll.visibility == View.VISIBLE) {
                     binding.fabScroll.hide()
+                }
+            }
+        })
+    }
+
+    private fun loadCharacters(query: String? = null) {
+        viewModel.fetchCharactersList(query).observe(this, { state ->
+            when (state) {
+                is State.LoadingState -> {
+                    binding.isLoading = true
+                    binding.isEmpty = false
+                    binding.swipeCharacters.isRefreshing = !binding.isLoading
+                    adapter.submitList(emptyList())
+                }
+                is State.DataState -> {
+                    binding.isLoading = false
+                    binding.swipeCharacters.isRefreshing = false
+                    binding.isEmpty = state.data.isEmpty()
+                    adapter.submitList(state.data)
+                }
+                is State.ErrorState -> {
+                    Toast.makeText(this, state.exception.localizedMessage, Toast.LENGTH_LONG).show()
+                    binding.isLoading = false
+                    binding.isEmpty = false
+                    binding.swipeCharacters.isRefreshing = false
                 }
             }
         })

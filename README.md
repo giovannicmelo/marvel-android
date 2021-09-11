@@ -1,6 +1,7 @@
 [![Kotlin](https://img.shields.io/badge/version-1.0.0-orange.svg)]()
 [![Kotlin](https://img.shields.io/badge/kotlin-powered-green.svg)]()
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
+[![Build](https://github.com/giovannicmelo/marvel-android/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/giovannicmelo/marvel-android/actions/workflows/build.yml)
 
 # Marvel Characters
 A sample of a consumer application of the Marvel API, made in Android

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.appbar.AppBarLayout
 import com.marvel.characters.R
 import com.marvel.characters.base.BaseActivity
@@ -32,7 +33,7 @@ class CharacterDetailsActivity :
         loadCharacter()
     }
 
-    override fun subscribeUi() {
+    private fun subscribeUi() {
         viewModel.character.observe(this, Observer {
             binding.character = it
             binding.isLoading = false
@@ -58,7 +59,7 @@ class CharacterDetailsActivity :
         return super.onOptionsItemSelected(item)
     }
 
-    private fun loadCharacter() = launch {
+    private fun loadCharacter() = lifecycleScope.launch {
         binding.isConnected = isConnected()
         binding.isLoading = isConnected()
         if (binding.isConnected) {

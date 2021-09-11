@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Marvel Characters</string>
+    <string name="image_transition_name">imageTransition</string>
+    <string name="text_transition_name">textTransition</string>
+    <string name="file_and_extension">%1$s.%2$s</string>
+    <string name="has_no_internet">There is no internet connection</string>
+    <string name="empty_list">There is no character to shown</string>
+    <string name="try_again">Try again!</string>
+    <string name="last_update">Last Update</string>
+    <string name="comics">Comics Appearances</string>
+    <string name="search">Search</string>
 </resources>

@@ -19,7 +19,7 @@
         tools:targetApi="n">
 
         <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name=".presentation.views.activities.SplashActivity"
             android:theme="@style/AppTheme.SplashTheme"
             android:noHistory="true"
             android:screenOrientation="portrait">
@@ -31,7 +31,7 @@
         </activity>
 
         <activity
-            android:name=".ui.character.CharactersListActivity"
+            android:name=".presentation.views.activities.CharactersListActivity"
             android:screenOrientation="portrait" />
 
         <activity

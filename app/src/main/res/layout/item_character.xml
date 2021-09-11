@@ -7,7 +7,7 @@
 
         <variable
             name="character"
-            type="com.marvel.data.models.Character" />
+            type="com.marvel.core.characters.domain.Character" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

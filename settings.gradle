@@ -1,2 +1,2 @@
-include ':app', ':data', ':ui', ':core'
+include ':app', ':data', ':core'
 rootProject.name='marvel-android'

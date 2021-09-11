@@ -1,7 +1,7 @@
-package com.marvel.characters.ui.character
+package com.marvel.characters.presentation.views.adapters
 
-import android.annotation.SuppressLint
 import com.marvel.core.characters.domain.Character
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -10,21 +10,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.marvel.characters.databinding.ItemCharacterBinding
 
 @SuppressLint("NotifyDataSetChanged")
-class CharacterAdapter(
+class CharactersListAdapter(
     private var listItems: List<Character>,
     private val listener: (Character, ImageView, TextView) -> Unit
-) : RecyclerView.Adapter<CharacterAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<CharactersListAdapter.CharactersListViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharactersListViewHolder {
         val binding = ItemCharacterBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return ViewHolder(binding)
+        return CharactersListViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CharactersListViewHolder, position: Int) {
         val character = listItems[position]
         holder.itemView.tag = character
         holder.bind(character, listener)
@@ -32,12 +32,13 @@ class CharacterAdapter(
 
     override fun getItemCount() = listItems.size
 
+
     fun submitList(items: List<Character>) {
         listItems = items
         notifyDataSetChanged()
     }
 
-    class ViewHolder(private val binding: ItemCharacterBinding) :
+    inner class CharactersListViewHolder(private val binding: ItemCharacterBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(character: Character, listener: (Character, ImageView, TextView) -> Unit) {
