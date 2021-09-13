@@ -1,5 +1,6 @@
 package com.marvel.core.characters.data
 
+import CharactersTestUtils
 import com.marvel.core.characters.data.contracts.CharactersDataSource
 import com.marvel.core.characters.data.contracts.CharactersRepositoryContract
 import com.nhaarman.mockitokotlin2.mock
@@ -23,27 +24,42 @@ class CharactersRepositoryTest {
     }
 
     @Test
-    fun `Fetch all characters, returns a list of characters`() = runBlockingTest {
+    fun `Fetch characters list, returns a list of first 20 characters`() = runBlockingTest {
         // ARRANGE
         val expected = CharactersTestUtils.getCharactersList()
         whenever(dataSourceMock.getCharacters()).thenReturn(expected)
 
         // ACT
-        val actual = repository.fetchAllCharacters()
+        val actual = repository.fetchCharactersList()
 
         // ASSERT
         assertEquals(expected, actual)
     }
 
     @Test
-    fun `Fetch all characters by name, when it is passed a name, then returns a list of characters`() = runBlockingTest {
+    fun `Fetch characters list, returns a list of next 20 characters`() = runBlockingTest {
+        // ARRANGE
+        val nextPage = true
+        val currentPage = 0
+        val expected = CharactersTestUtils.getCharactersList()
+        whenever(dataSourceMock.getCharacters(nextPage, currentPage)).thenReturn(expected)
+
+        // ACT
+        val actual = repository.fetchCharactersList(nextPage, currentPage)
+
+        // ASSERT
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `Fetch characters by name, when it is passed a name, then returns a list of characters`() = runBlockingTest {
         // ARRANGE
         val name = "Test"
         val expected = CharactersTestUtils.getCharactersList()
         whenever(dataSourceMock.getCharactersByName(name)).thenReturn(expected)
 
         // ACT
-        val actual = repository.fetchAllCharactersByName(name)
+        val actual = repository.fetchCharactersByName(name)
 
         // ASSERT
         assertEquals(expected, actual)

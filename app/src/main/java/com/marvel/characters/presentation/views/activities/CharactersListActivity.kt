@@ -6,6 +6,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.marvel.characters.R
 import com.marvel.characters.base.BaseActivity
@@ -19,13 +20,16 @@ import com.marvel.characters.utils.extensions.launchActivityForSharedElements
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val CHARACTER_ID_EXTRA = "characterId"
+const val FIXED_OFFSET = 20
 
 class CharactersListActivity :
     BaseActivity<ActivityCharactersListBinding>(R.layout.activity_characters_list) {
 
+    private var currentPage = 0
+
     private val viewModel: CharactersListViewModel by viewModel()
 
-    private val adapter = CharactersListAdapter(emptyList()) { character, image, text ->
+    private val adapter = CharactersListAdapter { character, image, text ->
         launchActivityForSharedElements<CharacterDetailsActivity>(
             Bundle().apply {
                 putInt(
@@ -75,8 +79,8 @@ class CharactersListActivity :
                 ContextCompat.getColor(this@CharactersListActivity, R.color.deep_red_two)
             )
             swipeCharacters.setOnRefreshListener {
-                adapter.submitList(emptyList())
-                loadCharacters(binding.etSearch.text.toString())
+                adapter.resetAdapter()
+                loadCharacters(binding.etSearch.text.toString(), false)
             }
         }
     }
@@ -87,6 +91,19 @@ class CharactersListActivity :
         binding.rvCharacters.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
+
+                if (dy > 0) {
+                    (recyclerView.layoutManager as? GridLayoutManager)?.let {
+                        val visibleThreshold = 2
+                        val lastItem = it.findLastCompletelyVisibleItemPosition()
+                        val currentTotalCount = it.itemCount
+
+                        if (currentTotalCount <= lastItem + visibleThreshold) {
+                            loadCharacters(loadNextPage = true)
+                        }
+                    }
+                }
+
                 if (dy > 0 && binding.fabScroll.visibility != View.VISIBLE) {
                     binding.fabScroll.show()
                 } else if (dy < 0 && binding.fabScroll.visibility == View.VISIBLE) {
@@ -96,25 +113,22 @@ class CharactersListActivity :
         })
     }
 
-    private fun loadCharacters(query: String? = null) {
-        viewModel.fetchCharactersList(query).observe(this, { state ->
+    private fun loadCharacters(query: String? = null, loadNextPage: Boolean = false) {
+        viewModel.fetchCharacters(query, loadNextPage, currentPage).observe(this, { state ->
             when (state) {
                 is State.LoadingState -> {
                     binding.isLoading = true
-                    binding.isEmpty = false
                     binding.swipeCharacters.isRefreshing = !binding.isLoading
-                    adapter.submitList(emptyList())
                 }
                 is State.DataState -> {
                     binding.isLoading = false
                     binding.swipeCharacters.isRefreshing = false
-                    binding.isEmpty = state.data.isEmpty()
                     adapter.submitList(state.data)
+                    currentPage = (adapter.itemCount / FIXED_OFFSET) - 1
                 }
                 is State.ErrorState -> {
                     Toast.makeText(this, state.exception.localizedMessage, Toast.LENGTH_LONG).show()
                     binding.isLoading = false
-                    binding.isEmpty = false
                     binding.swipeCharacters.isRefreshing = false
                 }
             }

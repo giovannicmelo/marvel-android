@@ -1,6 +1,5 @@
 package com.marvel.characters.presentation.views.adapters
 
-import com.marvel.core.characters.domain.Character
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,10 +7,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.marvel.characters.databinding.ItemCharacterBinding
+import com.marvel.core.characters.domain.Character
 
 @SuppressLint("NotifyDataSetChanged")
 class CharactersListAdapter(
-    private var listItems: List<Character>,
+    private var listItems: MutableList<Character> = mutableListOf(),
     private val listener: (Character, ImageView, TextView) -> Unit
 ) : RecyclerView.Adapter<CharactersListAdapter.CharactersListViewHolder>() {
 
@@ -32,12 +32,17 @@ class CharactersListAdapter(
 
     override fun getItemCount() = listItems.size
 
-    fun submitList(items: List<Character>) {
-        listItems = items
+    fun resetAdapter() {
+        listItems.clear()
         notifyDataSetChanged()
     }
 
-    inner class CharactersListViewHolder(private val binding: ItemCharacterBinding) :
+    fun submitList(items: List<Character>) {
+        listItems.addAll(items)
+        notifyDataSetChanged()
+    }
+
+    class CharactersListViewHolder(private val binding: ItemCharacterBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(character: Character, listener: (Character, ImageView, TextView) -> Unit) {

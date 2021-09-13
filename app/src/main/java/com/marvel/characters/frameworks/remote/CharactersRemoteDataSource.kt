@@ -17,9 +17,12 @@ class CharactersRemoteDataSource(
 ) : CharactersDataSource {
 
     @Throws(NetworkErrorException::class)
-    override suspend fun getCharacters(): List<Character> {
+    override suspend fun getCharacters(nextPage: Boolean, currentPage: Int): List<Character> {
         val result: ResultDto<CharacterDto> = request {
-            api.getCharacters(apiKey, hash, timestamp)
+            if (nextPage)
+                api.getCharacters((currentPage + 1) * 20, apiKey, hash, timestamp)
+            else
+                api.getCharacters(0, apiKey, hash, timestamp)
         }!!
         return CharacterMapper.toEntityList(result)
     }

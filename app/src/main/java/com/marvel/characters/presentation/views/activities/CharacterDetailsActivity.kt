@@ -33,7 +33,7 @@ class CharacterDetailsActivity :
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            this.onBackPressed()
+            finish()
         }
         return super.onOptionsItemSelected(item)
     }

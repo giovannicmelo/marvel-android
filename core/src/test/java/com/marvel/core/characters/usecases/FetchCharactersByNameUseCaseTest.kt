@@ -1,5 +1,6 @@
 package com.marvel.core.characters.usecases
 
+import CharactersTestUtils
 import com.marvel.core.characters.data.contracts.CharactersRepositoryContract
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
@@ -10,25 +11,26 @@ import org.junit.Before
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class FetchAllCharactersUseCaseTest {
+class FetchCharactersByNameUseCaseTest {
 
     private lateinit var repositoryMock: CharactersRepositoryContract
-    private lateinit var useCase: FetchAllCharactersUseCase
+    private lateinit var useCase: FetchCharactersByNameUseCase
 
     @Before
     fun setUp() {
         repositoryMock = mock()
-        useCase = FetchAllCharactersUseCase(repositoryMock)
+        useCase = FetchCharactersByNameUseCase(repositoryMock)
     }
 
     @Test
-    fun `Fetch all events, returns a list of characters`() = runBlockingTest {
+    fun `Fetch characters by name, when it is passed a name, then returns a list of characters`() = runBlockingTest {
         // ARRANGE
+        val name = "Test"
         val expected = CharactersTestUtils.getCharactersList()
-        whenever(repositoryMock.fetchAllCharacters()).thenReturn(expected)
+        whenever(repositoryMock.fetchCharactersByName(name)).thenReturn(expected)
 
         // ACT
-        val actual = useCase()
+        val actual = useCase(name)
 
         // ASSERT
         assertEquals(expected, actual)

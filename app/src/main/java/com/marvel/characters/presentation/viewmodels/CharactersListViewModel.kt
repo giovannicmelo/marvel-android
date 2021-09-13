@@ -2,19 +2,20 @@ package com.marvel.characters.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import com.marvel.characters.presentation.utils.state
-import com.marvel.core.characters.usecases.FetchAllCharactersByNameUseCase
-import com.marvel.core.characters.usecases.FetchAllCharactersUseCase
+import com.marvel.core.characters.usecases.FetchCharactersByNameUseCase
+import com.marvel.core.characters.usecases.FetchCharactersListUseCase
 
 class CharactersListViewModel(
-    private val fetchAllCharacters: FetchAllCharactersUseCase,
-    private val fetchAllCharactersByName: FetchAllCharactersByNameUseCase
+    private val fetchCharactersList: FetchCharactersListUseCase,
+    private val fetchCharactersByName: FetchCharactersByNameUseCase
 ) : ViewModel() {
 
-    fun fetchCharactersList(query: String? = null) = state {
-        if (query.isNullOrEmpty()) {
-            fetchAllCharacters()
-        } else {
-            fetchAllCharactersByName(query)
+    fun fetchCharacters(query: String? = null, nextPage: Boolean = false, currentPage: Int = 0) =
+        state {
+            if (query.isNullOrEmpty()) {
+                fetchCharactersList(nextPage, currentPage)
+            } else {
+                fetchCharactersByName(query)
+            }
         }
-    }
 }

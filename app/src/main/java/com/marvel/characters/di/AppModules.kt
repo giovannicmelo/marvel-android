@@ -28,8 +28,8 @@ private val characterViewModelModule = module {
 
     viewModel {
         CharactersListViewModel(
-            fetchAllCharacters = get(),
-            fetchAllCharactersByName = get()
+            fetchCharactersList = get(),
+            fetchCharactersByName = get()
         )
     }
     viewModel { CharacterDetailsViewModel(get()) }

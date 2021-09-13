@@ -4,7 +4,10 @@ import com.marvel.core.characters.domain.Character
 
 interface CharactersDataSource {
 
-    suspend fun getCharacters(): List<Character>
+    suspend fun getCharacters(
+        nextPage: Boolean = false,
+        currentPage: Int = 0
+    ): List<Character>
 
     suspend fun getCharactersByName(
         nameStartsWith: String

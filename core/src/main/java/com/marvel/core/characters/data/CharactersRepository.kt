@@ -6,11 +6,14 @@ import com.marvel.core.characters.domain.Character
 
 class CharactersRepository(private val dataSource: CharactersDataSource) :
     CharactersRepositoryContract {
-    override suspend fun fetchAllCharacters(): List<Character> {
-        return dataSource.getCharacters()
+    override suspend fun fetchCharactersList(
+        nextPage: Boolean,
+        currentPage: Int
+    ): List<Character> {
+        return dataSource.getCharacters(nextPage, currentPage)
     }
 
-    override suspend fun fetchAllCharactersByName(nameStartsWith: String): List<Character> {
+    override suspend fun fetchCharactersByName(nameStartsWith: String): List<Character> {
         return dataSource.getCharactersByName(nameStartsWith)
     }
 

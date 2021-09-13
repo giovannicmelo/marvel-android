@@ -13,6 +13,7 @@ interface CharactersApi {
     @GET("v1/public/characters")
     @Headers("Content-Type: application/json")
     suspend fun getCharacters(
+        @Query("offset") offset: Int,
         @Query("apikey") apikey: String,
         @Query("hash") hash: String,
         @Query("ts") ts: String

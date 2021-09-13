@@ -16,10 +16,6 @@
             type="boolean" />
 
         <variable
-            name="isEmpty"
-            type="Boolean" />
-
-        <variable
             name="clickListener"
             type="android.view.View.OnClickListener" />
     </data>
@@ -55,6 +51,7 @@
                     android:paddingStart="@dimen/default_padding"
                     android:paddingEnd="@dimen/default_padding"
                     android:clipToPadding="false"
+                    android:visibility="@{isLoading ? View.INVISIBLE : View.VISIBLE}"
                     app:spanCount="2"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     tools:listitem="@layout/item_character" />
@@ -69,20 +66,6 @@
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/deadpool"
                 android:visibility="@{isLoading ? View.VISIBLE : View.GONE}"/>
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/empty_list"
-                android:textColor="@color/deep_red_two"
-                android:textAlignment="center"
-                android:layout_gravity="center"
-                android:textSize="18sp"
-                android:fontFamily="@font/open_sans"
-                android:elevation="10dp"
-                android:visibility="@{isEmpty ? View.VISIBLE : View.GONE}"
-                tools:visibility="gone"/>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="wrap_content"
@@ -155,6 +138,7 @@
             android:elevation="@dimen/default_elevation"
             android:onClick="@{clickListener}"
             android:backgroundTint="@color/deep_red"
+            android:contentDescription="@string/fab_action"
             app:borderWidth="0dp"
             app:tint="@color/white_gray"
             app:fabCustomSize="50dp" />

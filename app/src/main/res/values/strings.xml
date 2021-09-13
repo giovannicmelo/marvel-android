@@ -9,4 +9,5 @@
     <string name="last_update">Last Update</string>
     <string name="comics">Comics Appearances</string>
     <string name="search">Search</string>
+    <string name="fab_action">A button to scroll to up screen</string>
 </resources>
