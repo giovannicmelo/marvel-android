@@ -2,6 +2,7 @@ package com.marvel.characters.presentation.views.activities
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -14,6 +15,7 @@ import com.marvel.characters.databinding.ActivityCharactersListBinding
 import com.marvel.characters.frameworks.utils.State
 import com.marvel.characters.presentation.viewmodels.CharactersListViewModel
 import com.marvel.characters.presentation.views.adapters.CharactersListAdapter
+import com.marvel.characters.presentation.views.components.Loader
 import com.marvel.characters.utils.extensions.hideKeyboard
 import com.marvel.characters.utils.extensions.isConnected
 import com.marvel.characters.utils.extensions.launchActivityForSharedElements
@@ -28,6 +30,8 @@ class CharactersListActivity :
     private var currentPage = 0
 
     private val viewModel: CharactersListViewModel by viewModel()
+
+    private val loader: Loader by lazy { Loader(this, this.window?.decorView as ViewGroup) }
 
     private val adapter = CharactersListAdapter { character, image, text ->
         launchActivityForSharedElements<CharacterDetailsActivity>(
@@ -117,18 +121,18 @@ class CharactersListActivity :
         viewModel.fetchCharacters(query, loadNextPage, currentPage).observe(this, { state ->
             when (state) {
                 is State.LoadingState -> {
-                    binding.isLoading = true
-                    binding.swipeCharacters.isRefreshing = !binding.isLoading
+                    loader.start()
+                    binding.swipeCharacters.isRefreshing = !loader.isStarted
                 }
                 is State.DataState -> {
-                    binding.isLoading = false
+                    loader.stop()
                     binding.swipeCharacters.isRefreshing = false
                     adapter.submitList(state.data)
                     currentPage = (adapter.itemCount / FIXED_OFFSET) - 1
                 }
                 is State.ErrorState -> {
                     Toast.makeText(this, state.exception.localizedMessage, Toast.LENGTH_LONG).show()
-                    binding.isLoading = false
+                    loader.stop()
                     binding.swipeCharacters.isRefreshing = false
                 }
             }

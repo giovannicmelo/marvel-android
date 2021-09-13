@@ -2,6 +2,7 @@ package com.marvel.characters.presentation.views.activities
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.appbar.AppBarLayout
@@ -11,6 +12,7 @@ import com.marvel.characters.databinding.ActivityCharacterDetailsBinding
 import com.marvel.characters.frameworks.utils.State
 import com.marvel.characters.presentation.viewmodels.CharacterDetailsViewModel
 import com.marvel.characters.presentation.views.adapters.ComicsListAdapter
+import com.marvel.characters.presentation.views.components.Loader
 import com.marvel.characters.utils.extensions.animateTransitionOnRebind
 import com.marvel.characters.utils.extensions.isConnected
 import com.marvel.characters.utils.extensions.setBackIconColor
@@ -25,6 +27,8 @@ class CharacterDetailsActivity :
     private val characterId by lazy { intent.getIntExtra(CHARACTER_ID_EXTRA, 0) }
 
     private val viewModel: CharacterDetailsViewModel by viewModel()
+
+    private val loader: Loader by lazy { Loader(this, this.window?.decorView as ViewGroup) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,10 +61,10 @@ class CharacterDetailsActivity :
         viewModel.getCharacter(id).observe(this, { state ->
             when (state) {
                 is State.LoadingState -> {
-                    binding.isLoading = true
+                    loader.start()
                 }
                 is State.DataState -> {
-                    binding.isLoading = false
+                    loader.stop()
                     binding.character = state.data
                     state.data.comics?.let {
                         binding.rvComics.adapter = ComicsListAdapter(it)
@@ -69,7 +73,7 @@ class CharacterDetailsActivity :
                 }
                 is State.ErrorState -> {
                     Toast.makeText(this, state.exception.localizedMessage, Toast.LENGTH_LONG).show()
-                    binding.isLoading = false
+                    loader.stop()
                 }
             }
         })

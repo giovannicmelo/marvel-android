@@ -8,10 +8,6 @@
         <import type="android.view.View" />
 
         <variable
-            name="isLoading"
-            type="boolean" />
-
-        <variable
             name="isConnected"
             type="boolean" />
 
@@ -51,13 +47,12 @@
                     android:paddingStart="@dimen/default_padding"
                     android:paddingEnd="@dimen/default_padding"
                     android:clipToPadding="false"
-                    android:visibility="@{isLoading ? View.INVISIBLE : View.VISIBLE}"
                     app:spanCount="2"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     tools:listitem="@layout/item_character" />
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-            <com.airbnb.lottie.LottieAnimationView
+<!--            <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animationView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -65,7 +60,7 @@
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/deadpool"
-                android:visibility="@{isLoading ? View.VISIBLE : View.GONE}"/>
+                android:visibility="@{isLoading ? View.VISIBLE : View.GONE}"/>-->
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="wrap_content"
