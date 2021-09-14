@@ -3,6 +3,7 @@ package com.marvel.characters
 import android.app.Application
 import com.marvel.characters.di.getAppModules
 import com.marvel.core.getCoreModules
+import io.paperdb.Paper
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
@@ -18,6 +19,8 @@ class MarvelApplication : Application() {
             androidContext(this@MarvelApplication)
             modules(getModules())
         }
+
+        Paper.init(this)
     }
 
     private fun getModules(): MutableList<Module> {

@@ -4,20 +4,38 @@ import com.marvel.core.characters.data.contracts.CharactersDataSource
 import com.marvel.core.characters.data.contracts.CharactersRepositoryContract
 import com.marvel.core.characters.domain.Character
 
-class CharactersRepository(private val dataSource: CharactersDataSource) :
-    CharactersRepositoryContract {
+class CharactersRepository(
+    private val remoteDataSource: CharactersDataSource.Remote,
+    private val localDataSource: CharactersDataSource.Local
+) : CharactersRepositoryContract {
     override suspend fun fetchCharactersList(
         nextPage: Boolean,
-        currentPage: Int
+        currentPage: Int,
+        isRefresh: Boolean
     ): List<Character> {
-        return dataSource.getCharacters(nextPage, currentPage)
+        return if (isRefresh) {
+            getListFromServer(nextPage, currentPage)
+        } else {
+            val persistedList = localDataSource.getCharacters()
+            if (persistedList.isEmpty()) {
+                getListFromServer(nextPage, currentPage)
+            } else persistedList
+        }
+    }
+
+    private suspend fun getListFromServer(nextPage: Boolean, currentPage: Int): List<Character> {
+        val remoteList = remoteDataSource.getCharacters(nextPage, currentPage)
+        localDataSource.deleteCharacters()
+        localDataSource.saveCharacters(remoteList)
+        return remoteList
     }
 
     override suspend fun fetchCharactersByName(nameStartsWith: String): List<Character> {
-        return dataSource.getCharactersByName(nameStartsWith)
+        return remoteDataSource.getCharactersByName(nameStartsWith)
     }
 
     override suspend fun getCharacterDetails(characterId: Int): Character {
-        return dataSource.getCharacterById(characterId)
+        return localDataSource.getCharacters().find { it.id == characterId }
+            ?: remoteDataSource.getCharacterById(characterId)
     }
 }

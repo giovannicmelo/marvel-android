@@ -6,7 +6,8 @@ interface CharactersRepositoryContract {
 
     suspend fun fetchCharactersList(
         nextPage: Boolean = false,
-        currentPage: Int = 0
+        currentPage: Int = 0,
+        isRefresh: Boolean = false
     ): List<Character>
 
     suspend fun fetchCharactersByName(nameStartsWith: String): List<Character>

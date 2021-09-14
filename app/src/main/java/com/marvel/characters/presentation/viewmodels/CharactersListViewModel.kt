@@ -10,10 +10,10 @@ class CharactersListViewModel(
     private val fetchCharactersByName: FetchCharactersByNameUseCase
 ) : ViewModel() {
 
-    fun fetchCharacters(query: String? = null, nextPage: Boolean = false, currentPage: Int = 0) =
+    fun fetchCharacters(query: String? = null, nextPage: Boolean = false, currentPage: Int = 0, isRefresh: Boolean = false) =
         state {
             if (query.isNullOrEmpty()) {
-                fetchCharactersList(nextPage, currentPage)
+                fetchCharactersList(nextPage, currentPage, isRefresh)
             } else {
                 fetchCharactersByName(query)
             }

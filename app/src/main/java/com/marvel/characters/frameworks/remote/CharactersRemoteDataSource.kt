@@ -1,6 +1,6 @@
 package com.marvel.characters.frameworks.remote
 
-import com.marvel.characters.frameworks.api.CharactersApi
+import com.marvel.characters.frameworks.remote.api.CharactersApi
 import com.marvel.characters.frameworks.dtos.CharacterDto
 import com.marvel.characters.frameworks.dtos.ResultDto
 import com.marvel.characters.frameworks.utils.NetworkErrorException
@@ -14,7 +14,7 @@ class CharactersRemoteDataSource(
     private val apiKey: String,
     private val timestamp: String,
     private val hash: String
-) : CharactersDataSource {
+) : CharactersDataSource.Remote {
 
     @Throws(NetworkErrorException::class)
     override suspend fun getCharacters(nextPage: Boolean, currentPage: Int): List<Character> {

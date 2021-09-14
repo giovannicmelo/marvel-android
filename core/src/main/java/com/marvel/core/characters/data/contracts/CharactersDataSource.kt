@@ -4,16 +4,26 @@ import com.marvel.core.characters.domain.Character
 
 interface CharactersDataSource {
 
-    suspend fun getCharacters(
-        nextPage: Boolean = false,
-        currentPage: Int = 0
-    ): List<Character>
+    interface Local {
+        fun getCharacters(): List<Character>
 
-    suspend fun getCharactersByName(
-        nameStartsWith: String
-    ): List<Character>
+        fun saveCharacters(characters: List<Character>)
 
-    suspend fun getCharacterById(
-        characterId: Int
-    ): Character
+        fun deleteCharacters()
+    }
+
+    interface Remote {
+        suspend fun getCharacters(
+            nextPage: Boolean = false,
+            currentPage: Int = 0
+        ): List<Character>
+
+        suspend fun getCharactersByName(
+            nameStartsWith: String
+        ): List<Character>
+
+        suspend fun getCharacterById(
+            characterId: Int
+        ): Character
+    }
 }

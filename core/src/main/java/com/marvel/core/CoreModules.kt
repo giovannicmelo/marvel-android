@@ -10,7 +10,12 @@ import org.koin.dsl.module
 
 private val modules = module {
 
-    factory<CharactersRepositoryContract> { CharactersRepository(get()) }
+    factory<CharactersRepositoryContract> {
+        CharactersRepository(
+            remoteDataSource = get(),
+            localDataSource = get()
+        )
+    }
     factory { FetchCharactersListUseCase(get()) }
     factory { FetchCharactersByNameUseCase(get()) }
     factory { GetCharacterDetailsUseCase(get()) }
