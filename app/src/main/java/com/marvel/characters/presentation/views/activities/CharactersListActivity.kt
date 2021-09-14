@@ -69,7 +69,7 @@ class CharactersListActivity :
         binding.etSearch.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 hideKeyboard()
-                loadCharacters(v.text.toString())
+                loadCharacters(v.text.toString(), true, isRefresh = true)
                 true
             } else {
                 false
@@ -84,7 +84,7 @@ class CharactersListActivity :
             )
             swipeCharacters.setOnRefreshListener {
                 adapter.resetAdapter()
-                loadCharacters(binding.etSearch.text.toString(), false)
+                loadCharacters(binding.etSearch.text.toString(), false, isRefresh = true)
             }
         }
     }
@@ -103,7 +103,7 @@ class CharactersListActivity :
                         val currentTotalCount = it.itemCount
 
                         if (currentTotalCount <= lastItem + visibleThreshold) {
-                            loadCharacters(loadNextPage = true)
+                            loadCharacters(loadNextPage = true, isRefresh = true)
                         }
                     }
                 }
@@ -117,8 +117,8 @@ class CharactersListActivity :
         })
     }
 
-    private fun loadCharacters(query: String? = null, loadNextPage: Boolean = false) {
-        viewModel.fetchCharacters(query, loadNextPage, currentPage).observe(this, { state ->
+    private fun loadCharacters(query: String? = null, loadNextPage: Boolean = false, isRefresh: Boolean = false) {
+        viewModel.fetchCharacters(query, loadNextPage, currentPage, isRefresh).observe(this, { state ->
             when (state) {
                 is State.LoadingState -> {
                     loader.start()

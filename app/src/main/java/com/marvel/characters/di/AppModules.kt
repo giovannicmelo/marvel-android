@@ -1,9 +1,11 @@
 package com.marvel.characters.di
 
 import com.marvel.characters.BuildConfig
-import com.marvel.characters.frameworks.api.CharactersApi
+import com.marvel.characters.frameworks.local.CharactersLocalDataSource
+import com.marvel.characters.frameworks.local.dao.CharactersDao
 import com.marvel.characters.frameworks.remote.CharactersRemoteDataSource
-import com.marvel.characters.frameworks.services.ServiceClient
+import com.marvel.characters.frameworks.remote.api.CharactersApi
+import com.marvel.characters.frameworks.remote.services.ServiceClient
 import com.marvel.characters.presentation.utils.getCurrentTimeStamp
 import com.marvel.characters.presentation.utils.toMd5
 import com.marvel.characters.presentation.viewmodels.CharacterDetailsViewModel
@@ -17,12 +19,18 @@ private val characterViewModelModule = module {
 
     val timeStamp = getCurrentTimeStamp()
 
-    factory<CharactersDataSource> {
+    factory<CharactersDataSource.Remote> {
         CharactersRemoteDataSource(
             api = get(),
             apiKey = BuildConfig.PUBLIC_KEY,
             timestamp = timeStamp,
             hash = "$timeStamp${BuildConfig.PRIVATE_KEY}${BuildConfig.PUBLIC_KEY}".toMd5()
+        )
+    }
+
+    factory<CharactersDataSource.Local> {
+        CharactersLocalDataSource(
+            dao = CharactersDao
         )
     }
 

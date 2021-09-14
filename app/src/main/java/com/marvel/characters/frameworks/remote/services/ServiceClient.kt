@@ -1,4 +1,4 @@
-package com.marvel.characters.frameworks.services
+package com.marvel.characters.frameworks.remote.services
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.marvel.characters.BuildConfig

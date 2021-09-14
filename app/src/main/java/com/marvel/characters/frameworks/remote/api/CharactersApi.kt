@@ -1,4 +1,4 @@
-package com.marvel.characters.frameworks.api
+package com.marvel.characters.frameworks.remote.api
 
 import com.marvel.characters.frameworks.dtos.CharacterDto
 import com.marvel.characters.frameworks.dtos.ResultDto

@@ -11,32 +11,15 @@ android {
         debug {
             applicationIdSuffix ".debug"
             buildConfigField "String", "BASE_URL", "\"https://gateway.marvel.com:443/\""
+            buildConfigField "String", "PUBLIC_KEY", "\"4f75a5aaab66bbb8766c5db2cc5e4be7\""
+            buildConfigField "String", "PRIVATE_KEY", "\"6795e93e7af13218371eff85c819c9b209ba4c3e\""
         }
 
         release {
             buildConfigField "String", "BASE_URL", "\"https://gateway.marvel.com:443/\""
+            buildConfigField "String", "PUBLIC_KEY", "\"4f75a5aaab66bbb8766c5db2cc5e4be7\""
+            buildConfigField "String", "PRIVATE_KEY", "\"6795e93e7af13218371eff85c819c9b209ba4c3e\""
         }
-    }
-
-    def propsFile = file('../keys.properties')
-    if (propsFile.canRead()) {
-        Properties props = new Properties()
-        def PUBLIC_KEY = props['PUBLIC_KEY']
-        def PRIVATE_KEY = props['PRIVATE_KEY']
-
-        buildTypes {
-            debug {
-                buildConfigField "String", "PUBLIC_KEY", "\"4f75a5aaab66bbb8766c5db2cc5e4be7\""
-                buildConfigField "String", "PRIVATE_KEY", "\"6795e93e7af13218371eff85c819c9b209ba4c3e\""
-            }
-
-            release {
-                buildConfigField "String", "PUBLIC_KEY", "\"4f75a5aaab66bbb8766c5db2cc5e4be7\""
-                buildConfigField "String", "PRIVATE_KEY", "\"6795e93e7af13218371eff85c819c9b209ba4c3e\""
-            }
-        }
-    } else {
-        throw new GradleException("Could not read local.properties!")
     }
 }
 
@@ -48,26 +31,24 @@ dependencies {
     implementation project(":core")
 
     implementation "androidx.core:core-ktx:$core_ktx_version"
-    implementation "androidx.lifecycle:lifecycle-extensions:$arch_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$arch_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$arch_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$arch_version"
-    // region Koin
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
     implementation "org.koin:koin-androidx-scope:$koin_version"
-    // endregion
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
-    implementation "com.google.android.material:material:1.4.0"
-    implementation "androidx.gridlayout:gridlayout:1.0.0"
-    implementation "androidx.recyclerview:recyclerview:$material_version"
+    implementation "com.google.android.material:material:$material_version"
+    implementation "androidx.gridlayout:gridlayout:$gridlayout_version"
+    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
     implementation "com.airbnb.android:lottie:$lottie_version"
-    implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$logging_interceptor_version"
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$coroutines_adapter"
+    implementation "io.paperdb:paperdb:$paper_version"
 
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_core_version"
     testImplementation "junit:junit:$junit_version"

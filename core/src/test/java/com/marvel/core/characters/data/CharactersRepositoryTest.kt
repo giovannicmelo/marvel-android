@@ -14,20 +14,22 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class CharactersRepositoryTest {
 
-    private lateinit var dataSourceMock: CharactersDataSource
+    private lateinit var remoteDataSourceMock: CharactersDataSource.Remote
+    private lateinit var localDataSourceMock: CharactersDataSource.Local
     private lateinit var repository: CharactersRepositoryContract
 
     @Before
     fun setUp() {
-        dataSourceMock = mock()
-        repository = CharactersRepository(dataSourceMock)
+        remoteDataSourceMock = mock()
+        localDataSourceMock = mock()
+        repository = CharactersRepository(remoteDataSourceMock, localDataSourceMock)
     }
 
     @Test
     fun `Fetch characters list, returns a list of first 20 characters`() = runBlockingTest {
         // ARRANGE
         val expected = CharactersTestUtils.getCharactersList()
-        whenever(dataSourceMock.getCharacters()).thenReturn(expected)
+        whenever(remoteDataSourceMock.getCharacters()).thenReturn(expected)
 
         // ACT
         val actual = repository.fetchCharactersList()
@@ -42,7 +44,7 @@ class CharactersRepositoryTest {
         val nextPage = true
         val currentPage = 0
         val expected = CharactersTestUtils.getCharactersList()
-        whenever(dataSourceMock.getCharacters(nextPage, currentPage)).thenReturn(expected)
+        whenever(remoteDataSourceMock.getCharacters(nextPage, currentPage)).thenReturn(expected)
 
         // ACT
         val actual = repository.fetchCharactersList(nextPage, currentPage)
@@ -56,7 +58,7 @@ class CharactersRepositoryTest {
         // ARRANGE
         val name = "Test"
         val expected = CharactersTestUtils.getCharactersList()
-        whenever(dataSourceMock.getCharactersByName(name)).thenReturn(expected)
+        whenever(remoteDataSourceMock.getCharactersByName(name)).thenReturn(expected)
 
         // ACT
         val actual = repository.fetchCharactersByName(name)
@@ -70,7 +72,7 @@ class CharactersRepositoryTest {
         // ARRANGE
         val id = 1
         val expected = CharactersTestUtils.getCharacter()
-        whenever(dataSourceMock.getCharacterById(id)).thenReturn(expected)
+        whenever(remoteDataSourceMock.getCharacterById(id)).thenReturn(expected)
 
         // ACT
         val actual = repository.getCharacterDetails(id)
