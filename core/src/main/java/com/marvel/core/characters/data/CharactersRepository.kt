@@ -24,9 +24,13 @@ class CharactersRepository(
     }
 
     private suspend fun getListFromServer(nextPage: Boolean, currentPage: Int): List<Character> {
+        val previousList = localDataSource.getCharacters()
         val remoteList = remoteDataSource.getCharacters(nextPage, currentPage)
-        localDataSource.deleteCharacters()
-        localDataSource.saveCharacters(remoteList)
+        val newList = mutableListOf<Character>().also {
+            it.addAll(previousList)
+            it.addAll(remoteList)
+        }
+        localDataSource.saveCharacters(newList)
         return remoteList
     }
 

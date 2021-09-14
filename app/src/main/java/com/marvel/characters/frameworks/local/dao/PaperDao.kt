@@ -3,9 +3,9 @@ package com.marvel.characters.frameworks.local.dao
 import android.util.Log
 import io.paperdb.Paper
 
-open class PaperDao<T>(private val KEY: String): AbstractDao<T> {
+open class PaperDao<T>(private val KEY: String) : AbstractDao<T> {
 
-    private val data = try {
+    private var data = try {
         Paper.book().read<T>(KEY)
     } catch (t: Throwable) {
         Paper.book().delete(KEY)
@@ -14,7 +14,7 @@ open class PaperDao<T>(private val KEY: String): AbstractDao<T> {
 
     private fun refresh() {
         val persisted = Paper.book().read<T>(KEY)
-        if(persisted != data) Paper.book().write(KEY, data)
+        if (persisted != data) data = persisted
     }
 
     override fun setData(data: T) {
